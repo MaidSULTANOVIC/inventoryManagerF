@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,6 +26,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final _firestore = Firestore.instance;
   int _counter = 0;
 
   void _incrementCounter() {
@@ -47,7 +49,20 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[],
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.airplay),
+              color: Colors.red,
+              onPressed: () {
+                _firestore.collection("product").add({
+                  'description': 'Pistolet a bille',
+                  'name': 'Pistolet',
+                  'price': 10,
+                  'quantity': 120
+                });
+              },
+            ),
+          ],
         ),
       ),
     );
