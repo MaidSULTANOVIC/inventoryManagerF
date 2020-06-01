@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:inventory_manager_f/views/CatModification.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,35 +29,45 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _firestore = Firestore.instance;
   int _counter = 0;
+  String catName = "";
+  int nbElementCat = -1;
 
-  void _incrementCounter() {
+  void _longPress() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      print("oui");
     });
+  }
+
+  void getProductCat() async {
+    await for (var snapshot in _firestore.collection("categorie").snapshots()) {
+      for (var categorie in snapshot.documents) {
+        String name = categorie.data['name'];
+        CatModification $name = new CatModification(categorie.documentID);
+        print($name.getId());
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    getProductCat();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            CatCard(),
+            CatCard(),
+            CatCard(),
             IconButton(
               icon: Icon(Icons.airplay),
               color: Colors.red,
               onPressed: () {
                 _firestore.collection("product").add({
-                  'description': 'Pistolet a bille',
-                  'name': 'Pistolet',
+                  'description': 'Pistolezaet a bille',
+                  'name': 'Piezastolet',
                   'price': 10,
                   'quantity': 120
                 });
@@ -65,6 +76,32 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class CatCard extends StatelessWidget {
+  const CatCard({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.only(top: 10.0),
+      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        ListTile(
+          title: Text('Voiture'),
+          trailing: Text("3659"),
+          subtitle: Text('Voiture de plusieurs couleur et de different modèle'),
+          onLongPress: () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => CatModification()),
+            // );
+          },
+        )
+      ]),
     );
   }
 }
