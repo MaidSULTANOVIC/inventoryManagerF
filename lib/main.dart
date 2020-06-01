@@ -58,9 +58,22 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: <Widget>[
-            CatCard(),
-            CatCard(),
-            CatCard(),
+            StreamBuilder<QuerySnapshot>(
+                stream: _firestore.collection("categorie").snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final categories = snapshot.data.documents;
+                    List<CatCard> catWidgets = [];
+
+                    for (var categorie in categories) {
+                      final name = categorie.data['name'];
+                      final description = categorie.data['description'];
+
+                      //final catWidget = CatCard()
+                      return Text(name);
+                    }
+                  }
+                }),
             IconButton(
               icon: Icon(Icons.airplay),
               color: Colors.red,
@@ -80,9 +93,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class CatCard extends StatelessWidget {
-  const CatCard({
+class CatCard extends StatefulWidget {
+  CatCard({
     Key key,
+    String name,
+    String description,
   }) : super(key: key);
 
   @override
@@ -91,7 +106,7 @@ class CatCard extends StatelessWidget {
       margin: EdgeInsets.only(top: 10.0),
       child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
         ListTile(
-          title: Text('Voiture'),
+          title: Text(""),
           trailing: Text("3659"),
           subtitle: Text('Voiture de plusieurs couleur et de different modèle'),
           onLongPress: () {
@@ -103,5 +118,11 @@ class CatCard extends StatelessWidget {
         )
       ]),
     );
+  }
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    throw UnimplementedError();
   }
 }
