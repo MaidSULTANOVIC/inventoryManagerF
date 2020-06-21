@@ -4,13 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class CatModification extends StatelessWidget {
   String _id;
   String _catName;
-
   final _firestore = Firestore.instance;
   List<DocumentSnapshot> allProducts = [];
 
   CatModification(String id) {
     this._id = id;
     this.setCatName();
+    this.getProducts();
   }
 
   String getId() {
@@ -45,19 +45,57 @@ class CatModification extends StatelessWidget {
     }
   }
 
+  void reload() {
+    this.allProducts.clear();
+    this.getProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
-    this.getProducts();
     return Scaffold(
       appBar: AppBar(
         title: Text(this._catName),
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  print("eaz");
+                  reload();
+                },
+                child: Icon(Icons.arrow_drop_down),
+              )),
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {},
+                child: Icon(Icons.more_vert),
+              )),
+        ],
       ),
-      body: Center(
-        child: RaisedButton(
-          onPressed: () {},
-          child: Text('Go back!'),
-        ),
-      ),
+      body: ListView.builder(
+          itemCount: allProducts.length,
+          itemBuilder: (BuildContext ctxt, int index) {
+            return productCard(
+                allProducts[index].data['name'],
+                allProducts[index].data['description'],
+                allProducts[index].data['price'],
+                allProducts[index].data['quantity']);
+          }),
     );
   }
+}
+
+Widget productCard(String name, String description, int prix, int quantite) {
+  return Card(
+    margin: EdgeInsets.only(top: 10.0),
+    child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+      ListTile(
+        title: Text(name),
+        trailing: Text(quantite.toString()),
+        subtitle: Text(description + "\nPrice : " + prix.toString() + "€"),
+        onLongPress: () {},
+      )
+    ]),
+  );
 }

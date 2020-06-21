@@ -83,18 +83,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                   }
                 }),
-            IconButton(
-              icon: Icon(Icons.airplay),
-              color: Colors.red,
-              onPressed: () {
-                _firestore.collection("product").add({
-                  'description': 'Pistolezaet a bille',
-                  'name': 'Piezastolet',
-                  'price': 10,
-                  'quantity': 120
-                });
-              },
-            ),
           ],
         ),
       ),
