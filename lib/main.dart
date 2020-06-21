@@ -31,6 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String catName = "";
   int nbElementCat = -1;
+  List<CatModification> catModif = [];
 
   void _longPress() {
     setState(() {
@@ -43,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
       for (var categorie in snapshot.documents) {
         String name = categorie.data['name'];
         CatModification $name = new CatModification(categorie.documentID);
-        print($name.getId());
+        catModif.add($name);
       }
     }
   }
@@ -63,15 +64,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final categories = snapshot.data.documents;
-                    List<CatCard> catWidgets = [];
+                    List<Widget> catWidgets = [];
 
                     for (var categorie in categories) {
                       final name = categorie.data['name'];
                       final description = categorie.data['description'];
 
-                      //final catWidget = CatCard()
-                      return Text(name);
+                      final catWidget = catCard(
+                          name,
+                          description,
+                          context,
+                          catModif.firstWhere(
+                              (element) => element.getCatName() == name));
+                      catWidgets.add(catWidget);
                     }
+                    return Column(
+                      children: catWidgets,
+                    );
                   }
                 }),
             IconButton(
@@ -93,36 +102,22 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class CatCard extends StatefulWidget {
-  CatCard({
-    Key key,
-    String name,
-    String description,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.only(top: 10.0),
-      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        ListTile(
-          title: Text(""),
-          trailing: Text("3659"),
-          subtitle: Text('Voiture de plusieurs couleur et de different modèle'),
-          onLongPress: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => CatModification()),
-            // );
-          },
-        )
-      ]),
-    );
-  }
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
-  }
+Widget catCard(String name, String description, BuildContext context,
+    CatModification catModif) {
+  return Card(
+    margin: EdgeInsets.only(top: 10.0),
+    child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+      ListTile(
+        title: Text(name),
+        trailing: Text("50"),
+        subtitle: Text(description),
+        onLongPress: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => catModif),
+          );
+        },
+      )
+    ]),
+  );
 }
