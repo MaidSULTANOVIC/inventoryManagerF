@@ -97,7 +97,7 @@ Widget catCard(String name, String description, BuildContext context,
     child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
       ListTile(
         title: Text(name),
-        trailing: Text("50"),
+        trailing: Text("52"),
         subtitle: Text(description),
         onLongPress: () {
           Navigator.push(

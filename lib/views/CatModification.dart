@@ -50,6 +50,26 @@ class CatModification extends StatelessWidget {
     this.getProducts();
   }
 
+  void handleClick(String value, BuildContext context) {
+    switch (value) {
+      case 'Settings':
+        //pop up dialog used to modify categorie's data
+        showDialog(
+            context: context,
+            builder: (context) {
+              return Dialog(
+                  elevation: 16,
+                  child: Container(
+                    height: 400.0,
+                    width: 360.0,
+                  ));
+            });
+        break;
+      case 'Reload':
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,12 +85,20 @@ class CatModification extends StatelessWidget {
                 },
                 child: Icon(Icons.arrow_drop_down),
               )),
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {},
-                child: Icon(Icons.more_vert),
-              )),
+          // 3 Dots menu in appbar
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              handleClick(value, context);
+            },
+            itemBuilder: (BuildContext context) {
+              return {'Settings', 'Reload'}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ),
         ],
       ),
       body: ListView.builder(
