@@ -57,12 +57,7 @@ class CatModification extends StatelessWidget {
         showDialog(
             context: context,
             builder: (context) {
-              return Dialog(
-                  elevation: 16,
-                  child: Container(
-                    height: 400.0,
-                    width: 360.0,
-                  ));
+              return dialogModifyCat();
             });
         break;
       case 'Reload':
@@ -126,4 +121,39 @@ Widget productCard(String name, String description, int prix, int quantite) {
       )
     ]),
   );
+}
+
+Widget dialogModifyCat() {
+  return Dialog(
+      elevation: 16,
+      child: Container(
+        height: 400.0,
+        width: 360.0,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 5.0, top: 15),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Text(
+                      "Categorie's name : ",
+                      style: TextStyle(fontSize: 17.0),
+                    ),
+                    Container(
+                      width: 100,
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          hintText: "Modify",
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Text("ok"),
+                FlatButton(onPressed: null, child: Icon(Icons.check)),
+              ]),
+        ),
+      ));
 }
